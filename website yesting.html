@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#292929", secondary: "#ededed" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TweenMax.min.js'></script><script  src="./script.js"></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+rel="stylesheet"
+/>
+<link
+href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap"
+rel="stylesheet"
+    />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+    />
+    <link 
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" 
+    rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&display=swap" rel="stylesheet">
+    <!-- Basic favicon -->
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/918174446769029120/1366577314065813525/ChatGPT_Image_28_._2025_._20_41_5722.png?ex=68136e0d&is=68121c8d&hm=afc28d1b65b3cf2897dd205e5a6cd176fc6633671d596421570f96ef06164a03&" type="image/x-icon">
+    
+    <link rel="shortcut icon" href="https://cdn.discordapp.com/attachments/918174446769029120/1366577314065813525/ChatGPT_Image_28_._2025_._20_41_5722.png?ex=681173cd&is=6810224d&hm=4f8dc7952be9c5d62e1d077ebda7ed819473973c36d6145b12f185d49a4e4383&" type="image/x-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+        </filter>
+      </defs>
+    </svg>
+
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      
+
+      #gradiento {position: fixed;top: 0;left: 0;width: 100%;height: 100%;
+        transition: all 0.3s ease-out;
+        background: linear-gradient(to right, #1f1e1e 0%, #303030 99%, #5c5c5c 100%);
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        cursor: crosshair;
+        color: #d4c2c2;
+      }
+      
+      svg {
+        display: none;
+      }
+      .mono {
+        font-family: 'Space Mono', monospace;
+      }
+      
+      .archivo-black-regular {
+        font-family: "Archivo Black", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      .anton-sc-regular {
+        font-family: "Anton SC", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      
+      .plamka{
+          pointer-events: none;
+          position: fixed;
+          display: block;
+          border-radius: 0;
+          transform-origin: center center;
+          mix-blend-mode: difference;
+          top: 0;
+          left: 0;
+          z-index: 1000;
+          filter: url("#goo")
+      }
+      .plamka span{
+           position: absolute;
+           display: block;
+           width: 26px;
+           height: 26px;
+           border-radius: 20px;
+           background-color: white;
+           transform-origin: center center;
+           transform: translate(-50%, -50%);
+       }
+
+       .child{
+        display: table-row;
+       }
+      .grid-item:hover .overlay {
+          opacity: 1;
+          background-color: rgba(54, 54, 54, 0.9);
+          color: rgb(224, 224, 224);
+      }
+
+      .grid-item:hover img {
+          filter: grayscale(32%);
+      }
+
+      .modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(22, 22, 22, 0.9);
+          z-index: 1000;
+          overflow: auto;
+      }
+
+      .modal-content {
+          position: relative;
+          margin: auto;
+          padding: 20px;
+          width: 80%;
+          max-width: 1200px;
+      }
+
+      .modal-nav {
+          position: absolute;
+          top: 50%;
+          width: 60px;
+          height: 60px;
+          background: rgb(207, 207, 207);
+          color: rgb(48, 48, 48);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 24px;
+          transform: translateY(-50%);
+      }
+
+
+      .modal-nav.prev {
+          left: 20px;
+      }
+
+      .modal-nav.next {
+          right: 20px;
+      }
+
+      .close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          color: white;
+          font-size: 40px;
+          font-weight: bold;
+          cursor: pointer;
+      }
+
+      .close:hover {
+          color: black;
+          background: rgb(204, 204, 204);
+          transition: all 0.3s;
+      }
+
+      input, textarea {
+          background: transparent;
+          border: 2px solid black;
+          padding: 12px;
+          font-family: 'Space Mono', monospace;
+          transition: all 0.3s;
+      }
+
+      input:focus, textarea:focus {
+          outline: none;
+          border-color: white;
+          background: black;
+          color: white;
+      }
+
+      .title-item {
+          position: relative;
+          transition: transform 0.3s;
+      }
+
+      .title-second {
+          position: relative;
+          transition: transform 0.3s;
+      }
+
+
+      .title-item::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 0;
+          height: 3px;
+          background: rgb(206, 206, 206);
+          transition: width 0.3s;
+      }
+
+      .title-second::after {
+          content: '';
+          position: absolute;
+          bottom: 105px;
+          left: 0;
+          width: 0;
+          height: 3px;
+          background: rgb(206, 206, 206);
+          transition: width 0.3s;
+      }
+      .title-item {
+          position: relative;
+          transition: transform 0.3s;
+      }
+
+      .title-second {
+          position: relative;
+          transition: transform 0.3s;
+      }
+
+
+      .title-item::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 600px;
+          height: 3px;
+          background: rgb(206, 206, 206);
+      }
+
+      .title-second::after {
+          content: '';
+          position: absolute;
+          bottom: 105px;
+          left: 0;
+          width: 600px;
+          height: 3px;
+          background: rgb(206, 206, 206);
+      }
+      .title-item:hover::after {
+          width: 600px;
+      }
+      .title-second:hover::after {
+          width: 600px;
+      }
+      .nav-item {
+          position: relative;
+          transition: transform 0.3s;
+      }
+
+      .nav-item:hover {
+          transform: skew(-10deg);
+      }
+
+      .nav-item::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 0;
+          height: 3px;
+          background: rgb(241, 241, 241);
+          transition: width 0.3s;
+      }
+
+      .nav-item:hover::after {
+          width: 100%;
+      }
+
+      ::-webkit-scrollbar {
+          width: 15px;
+      }
+
+      ::-webkit-scrollbar-track {
+          background: white;
+      }
+
+      ::-webkit-scrollbar-thumb {
+          background: black;
+          border: 3px solid white;
+      }
+
+      .glitch-hover:hover {
+          animation: glitch 0.3s linear infinite;
+      }
+
+      @keyframes glitch {
+          0% { transform: translate(0); }
+          25% { transform: translate(2px, 2px); }
+          50% { transform: translate(-2px, -2px); }
+          75% { transform: translate(-2px, 2px); }
+          100% { transform: translate(2px, -2px); }
+      }
+
+      .custom-button {
+          position: relative;
+          overflow: hidden;
+      }
+
+      .custom-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: white;
+          transition: all 0.3s;
+          z-index: -1;
+      }
+
+      .custom-button:hover::before {
+          left: 0;
+      }
+
+      .custom-button:hover {
+          color: black;
+      }
+    </style>
+  </head>
+  <body class="bg-primary">
+    <!-- plamka dots-->
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+        </filter>
+      </defs>
+    </svg>
+    <div id="plamka" class="plamka"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-black z-50 border-b-4 border-black">
+      <div class="container mx-auto px-2 py-4 flex justify-between items-center text-white">
+        <div class="archivo-black-regular uppercase text-3xl">Portfolio for you</div>
+        <div class="flex space-x-12 text-xl font-bold">
+          <a href="#work" class="nav-item uppercase tracking-widest">WORK</a>
+          <a href="#about" class="nav-item uppercase tracking-widest">ABOUT</a>
+          <a href="#contact" class="nav-item uppercase tracking-widest"
+            >CONTACT</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 px-6" >
+      <div class="container mx-auto">
+        <h1 class="text-8xl mb-4 tracking-tighter title-item title-second uppercase font-black">
+          PERSONAL<br />Design PORTFOLIO
+        </h1>
+        <p class="mono text-xl max-w-2xl ml-1 mt-8">
+          CREATING DIFFERENT DESIGNS FOR ALBUMS AND ARTISTS,
+          .
+        </p>
+        <div class="flex mt-12">
+          <a
+            href="#work"
+            class="custom-button bg-black text-white py-4 px-8 text-xl font-bold uppercase !rounded-button whitespace-nowrap"
+            >VIEW WORK</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section id="work" class="py-16 px-6">
+      <div class="container mx-auto">
+        <h2 class="text-6xl font-black uppercase mb-16 tracking-tighter">
+          SELECTED WORKS
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div
+            class="grid-item col-span-1 md:col-span-3 h-[1200px] relative  glitch-hover"
+          >
+            <img
+              src="https://media-hosting.imagekit.io/eac1cd46bb7b4e52/Без назви-2.jpg?Expires=1840743657&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=miJ0mRaV1bhXaQJEQyrs6w~X4ULca03wBq7Di9s2E3IhVlwanFjehWmO4kSD6HFK406iufgZZ2s4XSLuQMeoH586DASi76pV5mBYcTNGRsbK8H~4-mwwZbg~o9SbAqnJ-dRIG2KstwVCu0xfhTmV7KFxK13FZikh2P2554MqRvr32pW4G9DTVRz4c3kKFwfhhWOCXXuGGbpIMkPwbfngFjV3620TndOeGouUSKH-9IGejqsDhUlLyf207lG7x8vYm9U-i9ZHZ3hCMA5CA3c3zseW4j-lvN6zs2dWWb4mIpjIrdDwt24dFjkZLav7YY4hi11JLTGl6xmTW-LItXMdXA__"
+              alt="Місто Q"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-5xl font-black uppercase text-white">
+                Місто Q
+              </h3>
+              <p class="mono text-lg text-white mt-2">
+                Libenson - Місто Q / 2024
+              </p>
+            </div>
+          </div>
+          <!-- Grid Item 1 - Large -->
+          <div
+            class="grid-item col-span-1 md:col-span-2 h-[800px] relative  glitch-hover"
+          >
+            <img
+              src="https://media-hosting.imagekit.io/ff2b9bab38184ee6/screenshot_1746326952345.png?Expires=1840934953&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=sSkrYQE~9i9wdJmdmJMMyg3XY53uZsWDxMINmMvBgw~QnMpMeNybhLY9VlfW6YbLLJgctvzEquD8AO59IiR4ZWdJOx7wOUreUKADilivcW3Y7fUcbQzp1BkWl5miN4rfSSHRiyI3R-KFlvv89e7d5Xp4kq4GceGscPOz4fbwhQ5sQHiWh~yaYOkHpi2RZJh3ogYfaGcA01VcaywxOSXNxqa6HXJgP5eMB2VUh5SWzzHzFIduGoqqc1~zIMyd3gS44v2PsRH6LbGnSynTuuvJbZDLIUij6JK9YqZnb58UfDMq5bZ7kAVEBmszQJilVGcq3P8cpD4GS0uNroC-~X7ksQ__"
+              alt="ІДИ НА ЗВУК"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-5xl font-black uppercase text-white">
+                ІДИ НА ЗВУК 
+              </h3>
+              <p class="mono text-lg text-white mt-2">
+                ІДИ НА ЗВУК - GO A / 2023
+              </p>
+            </div>
+          </div>
+
+          <!-- Grid Item 2 -->
+          <div class="grid-item h-[800px] relative  glitch-hover">
+            <img
+              src="https://media-hosting.imagekit.io/2f079cf092674d27/screenshot_1746327589944.png?Expires=1840935590&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ebctQjR0-a6SyvnCs22Czd7Fafo27nzfGiygVwYjay0DyMp8WOkFk3M3gSOn1MJwnQAyTOB8TDzb~Y22nZGxM6czWThMzCntuKKaCenP3Y6~QJ-Tf0LVzYtJAOSczl~8eJdBZgASJbiTM1TmPNbYFWh4lHhfzI1Qk5pudzuhK-4dSmJrtDGBnZ0LYDXOcu0xhpD4X4cLa30dZqirc5vG1rfqRd2RBMyM5PLAVb-NWM4420GvqzHQEOgUICi7uuAZ-Seq~PEitTXe8nMNM6N04W~8mecav~f9vzu7PhSnTLYBwqI0EBw01tCq6KF2i0WLe7-P-bGIHvJ7I-MYsxQYNQ__"
+              alt="ART REVOLT"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-3xl font-black uppercase text-white">
+                PODOLANOCHKA TOUR
+              </h3>
+              <p class="mono text-sm text-white mt-2">
+                PODOLANOCHKA TOUR - GO A / 2023
+              </p>
+            </div>
+          </div>
+
+          <!-- Grid Item 3 -->
+          <div class="grid-item h-[500px] relative glitch-hover">
+            <img
+              src="https://media-hosting.imagekit.io/f24cabf4047f4905/elarm.png?Expires=1840942588&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=QtNJwOxocCDLwYZIroi4QOuRlBNFOTPSxRiB4p3At1n1xTo4CHIQbv7zL0uUJy7pXgnR9R-AtePTAnjmElLFQJrv6NV5al3To~7A~FVFWtMGwqLzTlK8GPkCOh~lQ0h8YQYP6~H3PwHXw-IkOogQgJCW96S0135k2TH9dM3vrml7wu0yWMyOB2uQQPJA8QTbvDW~4lhbxcaOAmAPX5i8HTJY54faLi77Y1rlwsNnUxxDjVUIF0VPnMRKSQvZokBMNU2hIrIXfX0hZgjfck-syFiPqGf-qCw8AyOtwD4G0sJ0wjxfS5vMkyZc1R~VtCIZQdwKD-YdipXijmXIO5fCdg__"
+              alt="DIGITAL FRONTIER"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-3xl font-black uppercase text-white">
+                НЕ Я
+              </h3>
+              <p class="mono text-sm text-white mt-2">НЕ Я - ELARM / 2024</p>
+            </div>
+          </div>
+
+          <!-- Grid Item 4 -->
+          <div class="grid-item h-[500px] relative glitch-hover">
+            <img
+              src="https://media-hosting.imagekit.io/1d9a14da415d4451/18837002871_52967e3e02_oFF.png?Expires=1840930770&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=WONHnXIOGR9a2nIVKqPwNSSDUKL39IpBe0OZexkzAvAs9lUGsK08bDoOb0~ds0bW449bH3mCiFmVU4iKqpo1sA9QRd0aWyYUfNEtkpI--KWg8wWw1NF4sIu7CJpS7uhEM69To50tpkR8Ah6374DC4UfWYBQx5shk8mqtsTM0TudowNONVjliRDQmvlmgw0oEoggu-IRsP5TQ3lxqv5Xi-F80HH-czVeiBDXb1OnO2n1RrddvdeW13jJgCBxyxlPZEiqL5EVHCgiFVEJZS2t-X-SATG9YA2x3hnpD0fLoIxa7-bVt6gbezbBoddD2Qt2VUL61oKgODZzsiyYq~ax1nQ__"
+              alt="URBAN THREADS"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-3xl font-black uppercase text-white">
+                KINO
+              </h3>
+              <p class="mono text-sm text-white mt-2">
+                KINO - OTOY / 2021
+              </p>
+            </div>
+          </div>
+
+
+          <div class="grid-item h-[500px] relative glitch-hover">
+            <img
+              src="https://media-hosting.imagekit.io/443915ae1ed347bf/Untitled-3.png?Expires=1841010031&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=oeC6HGteCgUBhu~6F0IEHHxquifFwkajjPUir2-DTM9kMUVlqLIVzmkM8LR9NhKEqgCbByVMtaRX3pfK5nlxNl98N1qPWGylz2Xj703HNq3P5AspGxvhSEDrnZ6uWhQQ7o7-GwC~YuuXus350-DXa6RpkCMhG2NyB2JPaJrzcRPVw2uFE1J2o~WnjbRsAByG23z31gjHCAxpjfmXhNU4VIM~IWGJb-XkHg35gYpNBT~fXiNwsWZuvg6dUyr83-t5nSlklyoAkpzeFecAlkw5MQKl~CP-y96aoozZDkj8SMBGkNjFyRck9OMbIqZGAGrmOu6I31ZoNDj-4ZJlvWiKeA__"
+              alt="URBAN THREADS"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-3xl font-black uppercase text-white">
+                ТОБІ ЛИЧИТЬ
+              </h3>
+              <p class="mono text-sm text-white mt-2">
+                ТОБІ ЛИЧИТЬ - MARCEL GARCON / 2023
+              </p>
+            </div>
+          </div>
+          <!-- Grid Item 5 - Large -->
+          <div
+            class="grid-item col-span-1 md:col-span-2 h-[500px] relative  glitch-hover"
+          >
+            <img
+              src="https://media-hosting.imagekit.io/3ce4824cd68a4528/Untitled-1.png?Expires=1841007770&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=uJ9yATN6OiMnoljcx9p8x975TNnpawiDt8GP-rXG6b4Y-I1xXreKIkwv9zOZzbSoKsnRApN2H8OTBpF1ksn9OrNcUWQ0VYUEdU3AxcBgVliqXQeOcFSW6NsWMIaGsL2UQ380~RLAYkalf6mMuKB5xUrdCkTC5idWlGaop7~0Mi3jBOOAUOXJHV861XE8XRTtQ4kxGjkuOdew0akjm1GpKrnvFRZrax62cKpNJMFwIFxOAjNyEMwct8gNuLNyzoz7BwOplEjhFHIC5IXA0FngH2jS9AThuz~-qzxjnFdOtMCqADTah~wYSnrvFZx6vURgIe9Z-cBjJTAXWb2GZ0EVLQ__"
+              alt="CINEMA UNDERGROUND"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-5xl font-black uppercase text-white">
+                суцільна брехня
+              </h3>
+              <p class="mono text-lg text-white mt-2">джозерс - суцільна брехня / 2024</p>
+            </div>
+          </div>
+
+          <!-- Grid Item 6 -->
+          <div class="grid-item h-[500px] relative  glitch-hover">
+            <img
+              src="https://media-hosting.imagekit.io/40925440bfca4e1b/beshket.png?Expires=1841029069&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=tTtYKlm3jnVvJe7rl-u6rCfEp6ISjiOvXBrJTEGaKR8-OtykzmV5D9yv7nOJndn3gzKVigC0BsygdTlkCiZrJ0SEmG7zgEiDYcciM578yJ1VLBH~rRNiPi1-XbKnMpYpwM~QmwcyMy4XG6Lto44x-XnfBmzEiX6PYASND2O~r5UHgdbHbahEhfHf6HLF59O~fVx4f7hQz-XL0lTE1HKeabXL4mcFji94Gs6YGxMNHzBzlccHVrOyAG5TMmFLuVEc4Il4awNF8S0dPfikFGbvk6nL~PxjLwqXYNLlyux-cwf33ChR7kkxnUTEgBakWXtmv~fWPpZ5eyNdq0RAtE0yug__"
+              alt="WORD REVOLT"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-3xl font-black uppercase text-white">
+                думки без терміну вживання
+              </h3>
+              <p class="mono text-sm text-white mt-2">
+                beshket - думки без терміну вживання / 2024
+              </p>
+            </div>
+          </div>
+
+          <!-- Grid Item 7 -->
+          <div class="grid-item col-span-1 md:col-span-2 h-[600px] relative  glitch-hover">
+            <img
+              src="https://media-hosting.imagekit.io/f80d35e2aebd4652/888888.png?Expires=1841016469&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=RJ5nCZ~O7ovYsApc~Q0DIXyWAJNiwmzV7QCLTEqqAav9yTY4mlDJ54j4i~vPC0dl2PTtetnsuKOrSPHxuw0M8J5jS5HHoO8jSRIksQHdS~hYEgPNQayHBow9YA~3GeH8CBiXXgVeU5JRuf-IMUE~BlNgJ5aprtYplG8N1VpbvVHvHyFgBIDoipblhm2FbmVNgiiG7Z0q8WoW2u8IX~PoTn0sIbpnC6ixC68g5hfQVNIpE3l91vFY9IMf3tEW7u~fRvS4B5b9jr2knqxlHcf7kB~JHGaBz3Se5EjVi0~osT6X-Yvc1q5OmG3lKKdsll7T0T3Ki7EFtRiPZCo6CTfATQ__"
+              alt="CONCRETE VISIONS"
+              class="w-full h-full object-cover object-top"
+            />
+            <div
+              class="overlay absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-8 opacity-0 transition-all duration-300"
+            >
+              <h3 class="text-3xl font-black uppercase text-white">
+                Schmalgauzen
+              </h3>
+              <p class="mono text-sm text-white mt-2">
+                Schmalgauzen poster / 2024
+              </p>
+            </div>
+          </div>
+
+          <!-- Grid Item 8 - Large -->
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" id="gradient-section" class="relative  py-16 px-6 text-white transition-all duration-300 ease-out bg-black">
+      <div class="container mx-auto">
+        <h2 class="text-6xl font-black uppercase mb-16 tracking-tighter">
+          ABOUT
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div>
+            <h3 class="text-3xl font-bold uppercase mb-8">APPROACH</h3>
+            <p class="mono text-lg leading-relaxed">
+              I REJECT CONVENTIONAL DESIGN PRINCIPLES IN FAVOR OF RAW,
+              UNFILTERED EXPRESSION. MY WORK EMBRACES IMPERFECTION, CELEBRATES
+              ASYMMETRY, AND CHALLENGES VIEWERS TO RECONSIDER THEIR RELATIONSHIP
+              WITH VISUAL COMMUNICATION.
+            </p>
+            <p class="mono text-lg leading-relaxed mt-6">
+              EACH PROJECT IS AN OPPORTUNITY TO BREAK RULES AND PUSH BOUNDARIES,
+              CREATING MEMORABLE VISUAL EXPERIENCES THAT DEMAND ATTENTION AND
+              PROVOKE THOUGHT.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-3xl font-bold uppercase mb-8">CLIENTS</h3>
+            <ul class="mono text-lg space-y-4">
+              <li>NONE... YET</li>
+
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-24">
+          <h3 class="text-3xl font-bold uppercase mb-8">PROCESS</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="border-2 border-white p-8">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-white text-black text-2xl font-bold mb-6"
+              >
+                01
+              </div>
+              <h4 class="text-xl font-bold uppercase mb-4">DECONSTRUCT</h4>
+              <p class="mono">
+                I START BY BREAKING THINGS DOWN — LOOKING AT WHAT’S ALREADY OUT THERE, FIGURING OUT WHAT WORKS, AND FINDING SPACE TO MAKE IT BETTER.
+              </p>
+            </div>
+
+            <div class="border-2 border-white p-8">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-white text-black text-2xl font-bold mb-6"
+              >
+                02
+              </div>
+              <h4 class="text-xl font-bold uppercase mb-4">EXPERIMENT</h4>
+              <p class="mono">
+                THIS IS WHERE THE FUN HAPPENS. I TEST IDEAS, MIX THINGS UP, AND PLAY WITH LAYOUTS UNTIL SOMETHING CLICKS.
+              </p>
+            </div>
+
+            <div class="border-2 border-white p-8">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-white text-black text-2xl font-bold mb-6"
+              >
+                03
+              </div>
+              <h4 class="text-xl font-bold uppercase mb-4">DISRUPT</h4>
+              <p class="mono">
+                THE GOAL? MAKE SOMETHING THAT GRABS ATTENTION. I WANT MY WORK TO FEEL FRESH, SURPRISING, AND WORTH A SECOND LOOK.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 px-6">
+      <div class="container mx-auto">
+        <h2 class="text-6xl font-black uppercase mb-16 tracking-tighter">
+          CONTACT
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div>
+            <h3 class="text-3xl font-bold uppercase mb-8">GET IN TOUCH</h3>
+            <p class="mono text-lg mb-8 ">
+              INTERESTED IN COLLABORATING? SEND A
+              MESSAGE WITH DETAILS ABOUT YOUR NEEDS.
+            </p>
+
+            <form class="space-y-6">
+              <div>
+                <input
+                  type="text"
+                  placeholder="NAME"
+                  class="w-full border-zinc-400 bg-transparent border-2 border-black"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  placeholder="EMAIL"
+                  class="w-full border-zinc-400 bg-transparent border-2 border-black"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="PROJECT TYPE"
+                  class="w-full border-zinc-400 bg-transparent border-2 border-black"
+                  required
+                />
+              </div>
+              <div>
+                <textarea
+                  placeholder="PROJECT DETAILS"
+                  class="w-full h-40 border-zinc-400 bg-transparent border-2 border-black"
+                  required
+                ></textarea>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  class="custom-button bg-black text-white py-4 px-8 text-xl font-bold uppercase !rounded-button whitespace-nowrap"
+                >
+                  SEND MESSAGE
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div>
+            <h3 class="text-3xl font-bold uppercase mb-8">INFORMATION</h3>
+            <div class="mono text-lg space-y-6">
+              <div>
+                <p class="font-bold">CURRENT LOCATION</p>
+                <p>12 MILE ROAD</p>
+                <p>WARREN, MICHIGAN</p>
+                <p>UNITED STATES</p>
+              </div>
+
+              <div>
+                <p class="font-bold">CONTACT DETAILS</p>
+                <p>EMAIL: savchenkoleh@gmail.com</p>
+                <p>PHONE: +12485106958</p>
+              </div>
+
+              <div>
+                <p class="font-bold">SOCIAL MEDIA</p>
+                <div class="flex space-x-6 mt-4">
+                  <a
+                    href="https://www.instagram.com/savchenko.oleh/"
+                    class="w-12 h-12 flex items-center justify-center bg-black text-white"
+                  >
+                    <i class="ri-instagram-line ri-lg"></i>
+                  </a>
+                  <a
+                    href="https://www.behance.net/olehsavchenko1"
+                    class="w-12 h-12 flex items-center justify-center bg-black text-white"
+                  >
+                    <i class="ri-behance-line ri-lg"></i>
+                  </a>
+                  <a
+                    href="https://www.facebook.com/oleh.savchenko.33/"
+                    class="w-12 h-12 flex items-center justify-center bg-black text-white"
+                  >
+                    <i class="ri-facebook-line ri-lg"></i>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/%D0%BE%D0%BB%D0%B5%D0%B3-%D1%81%D0%B0%D0%B2%D1%87%D0%B5%D0%BD%D0%BA%D0%BE-undefined-833457350/"
+                    class="w-12 h-12 flex items-center justify-center bg-black text-white"
+                  >
+                    <i class="ri-linkedin-line ri-lg"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-6 bg-black text-white">
+      <div class="container mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="font-['Pacifico'] text-2xl mb-4 md:mb-0">Thanks <figcaption></figcaption> for Visiting</div>
+          <p class="mono text-sm">
+            © 2025 SAVCHENKO'S PORTFOLIO. NONE OF THE RIGHTS ARE RESERVED.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal Gallery -->
+    <div id="galleryModal" class="modal">
+      <span class="close">&times;</span>
+      <div class="modal-content">
+        <img
+          id="modalImage"
+          src=""
+          alt=""
+          class="w-full max-h-[70vh] object-contain"
+        />
+        <div class="mt-8 text-white">
+          <h3 id="modalTitle" class="text-4xl font-black uppercase"></h3>
+          <p id="modalDescription" class="mono text-lg mt-2"></p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div>
+              <h4 class="text-xl font-bold uppercase mb-4">PROJECT DETAILS</h4>
+              <p class="mono" id="modalDetails"></p>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold uppercase mb-4">
+                CLIENT INFORMATION
+              </h4>
+              <p class="mono" id="modalClient"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-nav prev">&#10094;</div>
+      <div class="modal-nav next">&#10095;</div>
+    </div>
+<script>
+        
+      document.addEventListener("DOMContentLoaded", function () {
+        const gridItems = document.querySelectorAll(".grid-item");
+        const modal = document.getElementById("galleryModal");
+        const modalImg = document.getElementById("modalImage");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDescription = document.getElementById("modalDescription");
+        const modalDetails = document.getElementById("modalDetails");
+        const modalClient = document.getElementById("modalClient");
+        const closeBtn = document.getElementsByClassName("close")[0];
+        const prevBtn = document.querySelector(".modal-nav.prev");
+        const nextBtn = document.querySelector(".modal-nav.next");
+
+        let currentIndex = 0;
+
+        const projectData = [
+          {
+            title: "NOISE FESTIVAL",
+            description: "EXPERIMENTAL MUSIC EVENT SERIES / 2024",
+            details:
+              "A series of posters for an underground music festival featuring experimental electronic artists. The design uses stark typography and raw geometric elements to reflect the disruptive nature of the music.",
+            client: "UNDERGROUND RECORDS\nLONDON, UK\nCOMPLETED: MARCH 2024",
+          },
+          {
+            title: "ART REVOLT",
+            description: "EXHIBITION CAMPAIGN / 2023",
+            details:
+              "Campaign for a contemporary art exhibition challenging traditional artistic norms. The design intentionally breaks conventional layout rules to mirror the exhibition's revolutionary themes.",
+            client:
+              "BERLIN ART COLLECTIVE\nBERLIN, GERMANY\nCOMPLETED: NOVEMBER 2023",
+          },
+          {
+            title: "DIGITAL FRONTIER",
+            description: "TECH CONFERENCE / 2024",
+            details:
+              "Visual identity for a technology conference exploring the future of digital interfaces. The design incorporates glitch aesthetics and circuit-inspired patterns to represent technological disruption.",
+            client:
+              "DIGITAL DISRUPTION CONFERENCE\nSAN FRANCISCO, USA\nCOMPLETED: JANUARY 2024",
+          },
+          {
+            title: "URBAN THREADS",
+            description: "FASHION CAMPAIGN / 2023",
+            details:
+              "Poster series for an avant-garde fashion brand's seasonal collection. The design uses stark contrasts and unconventional typography placement to challenge fashion advertising conventions.",
+            client: "URBAN OUTFITTERS\nNEW YORK, USA\nCOMPLETED: SEPTEMBER 2023",
+          },
+          {
+            title: "CINEMA UNDERGROUND",
+            description: "FILM FESTIVAL / 2024",
+            details:
+              "Identity for an independent film festival celebrating experimental cinema. The design incorporates film strip elements and cinematic imagery with intentionally disruptive compositions.",
+            client:
+              "INDEPENDENT FILM FESTIVAL\nTORONTO, CANADA\nCOMPLETED: FEBRUARY 2024",
+          },
+          {
+            title: "WORD REVOLT",
+            description: "LITERARY FESTIVAL / 2023",
+            details:
+              "Poster series for a literary event featuring avant-garde writers and poets. The typography-focused design intentionally breaks traditional text hierarchy to reflect the experimental nature of the featured works.",
+            client:
+              "AVANT-GARDE PUBLISHING HOUSE\nPARIS, FRANCE\nCOMPLETED: OCTOBER 2023",
+          },
+          {
+          title: "WORD REVOLT",
+            description: "LITERARY FESTIVAL / 2023",
+            details:
+              "Poster series for a literary event featuring avant-garde writers and poets. The typography-focused design intentionally breaks traditional text hierarchy to reflect the experimental nature of the featured works.",
+            client:
+              "AVANT-GARDE PUBLISHING HOUSE\nPARIS, FRANCE\nCOMPLETED: OCTOBER 2023",
+          },
+          {
+            title: "CONCRETE VISIONS",
+            description: "ARCHITECTURE EXHIBITION / 2024",
+            details:
+              "Visual identity for an exhibition exploring brutalist architecture. The design uses raw geometric forms and blueprint-inspired elements to reflect the architectural subject matter.",
+            client:
+              "ARCHITECTURAL DIGEST\nROTTERDAM, NETHERLANDS\nCOMPLETED: APRIL 2024",
+          },
+          {
+            title: "SONIC DISRUPTION",
+            description: "ALBUM ARTWORK SERIES / 2024",
+            details:
+              "Series of album covers for an experimental music label. Each design uses vinyl record elements and intentionally disruptive compositions to reflect the unconventional nature of the music.",
+            client: "UNDERGROUND RECORDS\nLONDON, UK\nCOMPLETED: JANUARY 2024",
+          },
+        ];
+
+        gridItems.forEach((item, index) => {
+          item.addEventListener("click", function () {
+            currentIndex = index;
+            updateModal();
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+          });
+        });
+
+        function updateModal() {
+          const data = projectData[currentIndex];
+          const img = gridItems[currentIndex].querySelector("img").src;
+
+          modalImg.src = img;
+          modalTitle.textContent = data.title;
+          modalDescription.textContent = data.description;
+          modalDetails.textContent = data.details;
+          modalClient.textContent = data.client;
+        }
+
+        closeBtn.addEventListener("click", function () {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        });
+
+        prevBtn.addEventListener("click", function () {
+          currentIndex = (currentIndex - 1 + gridItems.length) % gridItems.length;
+          updateModal();
+        });
+
+        nextBtn.addEventListener("click", function () {
+          currentIndex = (currentIndex + 1) % gridItems.length;
+          updateModal();
+        });
+
+        window.addEventListener("click", function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (modal.style.display === "block") {
+            if (event.key === "Escape") {
+              modal.style.display = "none";
+              document.body.style.overflow = "auto";
+            } else if (event.key === "ArrowLeft") {
+              currentIndex = (currentIndex - 1 + gridItems.length) % gridItems.length;
+              updateModal();
+            } else if (event.key === "ArrowRight") {
+              currentIndex = (currentIndex + 1) % gridItems.length;
+              updateModal();
+            }
+          }
+        });
+      });
+       
+  </script>
+  </body>
+  </html>
